@@ -3,7 +3,6 @@
 
 install_storageclass_config: true
 install_prereqs_config: true
-storageclass_overwrite_config: true
 run_backup: true
 
 ## Directory for temporary files to put the list of
