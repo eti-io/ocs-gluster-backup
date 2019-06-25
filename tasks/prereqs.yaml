@@ -1,6 +1,7 @@
 ---
 # Configure the prequisites for the bastion host
 - name: Configure packages
+  hosts: bastion[0]
   package:
     name: "{{ item }}"
     state: latest
