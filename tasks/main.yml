@@ -16,9 +16,8 @@ vars:
   import_tasks: storageclass.yml
   when: install_storageclass_config|bool == true
 
-block:
-  name: backup volumes
-  tasks: 
+- name: backup volumes
+  block:
     # Figure out what we need to snapshot
     - name: Gather volumes to snapshot
       import_tasks: volume_list.yaml
