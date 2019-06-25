@@ -1,13 +1,13 @@
 ---
 # Configure the prequisites for the bastion host
-hosts: bastion[0]
-tasks:
-- name: Configure packages
-  package:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - glusterfs-client
-    - heketi-client
-    - atomic-openshift-clients
+- hosts: bastion[0]
+  tasks:
+  - name: Configure packages
+    package:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+      - glusterfs-client
+      - heketi-client
+      - atomic-openshift-clients
 ...
