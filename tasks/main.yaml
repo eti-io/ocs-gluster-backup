@@ -1,11 +1,11 @@
 ---
 # tasks file for ocs-gluster-backup
-- name: Set the current time as a var
-  shell: echo `%Y%m%d-%H:%M`
-  register: datetime
-
 - hosts: bastion[0]
   tasks:
+  - name: Set the current time as a var
+    shell: echo `%Y%m%d-%H:%M`
+    register: datetime
+
   - name: Install prerequisites
     import_tasks: prereqs.yaml
     when: install_prereqs_config|bool == true
@@ -13,7 +13,6 @@
   - name: Configure Storage class
     import_tasks: storageclass.yaml
     when: install_storageclass_config|bool == true
-
 
   # Figure out what we need to snapshot
   - name: Gather volumes to snapshot

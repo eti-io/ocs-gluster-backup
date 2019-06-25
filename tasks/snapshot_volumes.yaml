@@ -1,7 +1,6 @@
 ---
 - name: create snapshot mountpoint
   become: true
-  delegate_to: bastion[0]
   file:
     path: "{{ mount_directory }}/{{ item.snapshot }}"
     state: directory
@@ -9,7 +8,6 @@
 
 - name: Mount snapshot
   become: true
-  delegate_to: bastion[0]
   mount:
     path: "{{ mount_directory }}/{{ item.snapshot }}"
     fstype: glusterfs
@@ -18,7 +16,6 @@
 
 - name: Create target directory
   become: true
-
   file:
     path: "/{{ snapshot_dir }}/{{ item.snapshot }}"
     state: directory
