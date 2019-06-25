@@ -6,6 +6,5 @@
     state: latest
   with_items:
     - glusterfs-client
-    - heketi-client
     - atomic-openshift-clients
 ...
