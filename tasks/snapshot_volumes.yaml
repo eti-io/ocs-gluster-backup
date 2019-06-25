@@ -35,4 +35,3 @@
     path: "{{ mount_directory }}/{{ item.snapshot }}"
     state: unmounted 
   with_items: item
-
