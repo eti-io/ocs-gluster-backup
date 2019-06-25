@@ -1,5 +1,4 @@
 ---
-
 - name: Backup the old storageclass
   host: bastion[0]
   shell: oc get sc glusterfs-storage > /tmp/glusterfs-storage.yaml.tmp

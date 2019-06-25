@@ -1,6 +1,5 @@
 ---
 # Configure the prequisites for the bastion host
-
 - name: Configure packages
   package:
     name: "{{ item }}"
@@ -9,7 +8,4 @@
     - glusterfs-client
     - heketi-client
     - atomic-openshift-clients
-
-
-
 ...

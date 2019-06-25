@@ -2,5 +2,7 @@
 # Placeholder for logic to clear up older backups
 
 - name: clearup old backups
+  debug: msg="hello"
 
 - name: clear up mount points
+  debug: msg="hello"

@@ -36,6 +36,3 @@ vars:
       with_items: volumes
 
   when: run_backup|bool == true
-  
-  
-  
