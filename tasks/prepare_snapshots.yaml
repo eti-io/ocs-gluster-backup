@@ -1,0 +1,10 @@
+---
+- name: create snapshot
+  become: true
+  shell: "/usr/sbin/gluster snapshot create {{ item.snapshot }} {{ item.volume }} no-timestamp | awk '{ print $5}'"
+  with_items: item
+
+- name: activate snapshot
+  become: true
+  shell: "/usr/sbin/gluster snapshot activate {{ item.snapshot }}"
+  with_items: item

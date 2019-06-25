@@ -4,30 +4,48 @@
   shell: echo `%Y%m%d-%H:%M`
   register: datetime
 
-- name: Install prerequisites
-  import_tasks: prereqs.yaml
-  when: install_prereqs_config|bool == true
+- hosts: bastion[0]
+  tasks:
+  - name: Install prerequisites
+    import_tasks: prereqs.yaml
+    when: install_prereqs_config|bool == true
 
-- name: Configure Storage class
-  import_tasks: storageclass.yaml
-  when: install_storageclass_config|bool == true
+  - name: Configure Storage class
+    import_tasks: storageclass.yaml
+    when: install_storageclass_config|bool == true
 
-- name: backup volumes
-  block:
-    # Figure out what we need to snapshot
-    - name: Gather volumes to snapshot
-      import_tasks: volume_list.yaml
 
-    - name: generate volume dictionary
-      set_fact:
-        volumes: "{{ volumes|default([]) + [ {'volume': {{item}}, 'snapshot': {{item}}-snap-{{datetime}} ] }}"
-      with_items: "{{ source_volumes }}"
+  # Figure out what we need to snapshot
+  - name: Gather volumes to snapshot
+    import_tasks: volume_list.yaml
+    when: run_backup|bool == true
 
-    - name: Snapshot volumes
-      import_tasks: snapshot_volumes.yaml
-      with_items: volumes
+  - name: generate volume dictionary
+    set_fact:
+      volumes: "{{ volumes|default([]) + [ {'volume': {{item}}, 'snapshot': {{item}}-snap-{{datetime}} ] }}"
+    with_items: "{{ source_volumes }}"
+    when: run_backup|bool == true
 
-    - name: Clear up previous backups
-      import_tasks: cleanup.yaml
-      with_items: volumes
-  when: run_backup|bool == true
+- hosts: glusterfs[0]
+  tasks:
+  - name: Prepare snapshots
+    import_tasks: prepare_snapshots.yaml
+    with_items: volumes
+    when: run_backup|bool == true
+
+  - name: Snapshot volumes
+    import_tasks: snapshot_volumes.yaml
+    with_items: volumes
+    when: run_backup|bool == true
+
+  - name: Clean snapshots
+    import_tasks: cleanup_snapshots.yaml
+    with_items: volumes
+    when: run_backup|bool == true
+
+- hosts: bastion[0]
+  tasks:
+  - name: Clear up previous backups
+    import_tasks: cleanup.yaml
+    with_items: volumes
+    when: run_backup|bool == true

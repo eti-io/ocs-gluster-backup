@@ -1,16 +1,4 @@
 ---
-- name: create snapshot
-  become: true
-  delegate_to: glusterfs[0]
-  shell: "/usr/sbin/gluster snapshot create {{ item.snapshot }} {{ item.volume }} no-timestamp | awk '{ print $5}'"
-  with_items: item
-
-- name: activate snapshot
-  become: true
-  delegate_to: glusterfs[0]
-  shell: "/usr/sbin/gluster snapshot activate {{ item.snapshot }}"
-  with_items: item
-
 - name: create snapshot mountpoint
   become: true
   delegate_to: bastion[0]
@@ -30,14 +18,13 @@
 
 - name: Create target directory
   become: true
-  delegate_to: bastion[0]
+
   file:
     path: "/{{ snapshot_dir }}/{{ item.snapshot }}"
     state: directory
   with_items: item
 
 - name: Tar the source
-  delegate_to: bastion[0]
   archive:
     path:
       - "{{ mount_directory }}/{{ item.snapshot }}/*"
@@ -47,14 +34,8 @@
 
 - name: unmount the snapshot volume
   become: true
-  delegate_to: bastion[0]
   mount:
     path: "{{ mount_directory }}/{{ item.snapshot }}"
     state: unmounted 
   with_items: item
 
-- name: Delete the Gluster snapshot
-  become: true
-  delegate_to: glusterfs[0]
-  shell: "/usr/sbin/gluster snapshot delete {{ item.snapshot }}"
-  with_items: item

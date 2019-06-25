@@ -1,0 +1,5 @@
+---
+- name: Delete the Gluster snapshot
+  become: true
+  shell: "/usr/sbin/gluster snapshot delete {{ item.snapshot }}"
+  with_items: item
