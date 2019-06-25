@@ -1,6 +1,5 @@
 ---
 - name: get list of volumes to backup
-
   shell: '/usr/bin/heketi-cli volume list --server {{ heketi_url }} --user {{ heketi_user }} --secret {{ heketi_secret }} | /usr/bin/grep -v block | /usr/bin/grep -v heketidbstorage | /usr/bin/cut -d":" -f4'
   register: source_volumes
 ...
