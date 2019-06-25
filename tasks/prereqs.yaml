@@ -1,7 +1,8 @@
 ---
 # Configure the prequisites for the bastion host
+hosts: bastion[0]
+tasks:
 - name: Configure packages
-  delegate_to: bastion[0]
   package:
     name: "{{ item }}"
     state: latest
