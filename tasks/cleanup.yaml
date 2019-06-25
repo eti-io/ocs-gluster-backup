@@ -1,0 +1,6 @@
+---
+# Placeholder for logic to clear up older backups
+
+- name: clearup old backups
+
+- name: clear up mount points

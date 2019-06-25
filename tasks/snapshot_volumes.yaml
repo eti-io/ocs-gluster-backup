@@ -1,0 +1,60 @@
+---
+
+- name: create snapshot
+  become: true
+  host: gluster[0]
+  shell: "/usr/sbin/gluster snapshot create {{ item.snapshot }} {{ item.volume }} no-timestamp | awk '{ print $5}'"
+  with_items: item
+
+- name: activate snapshot
+  become: true
+  host: gluster[0]
+  shell: "/usr/sbin/gluster snapshot activate {{ item.snapshot }}"
+  with_items: item
+
+- name: create snapshot mountpoint
+  become: true
+  host: bastion[0]
+  file:
+    path: "{{ mount_directory }}/{{ item.snapshot }}"
+    state: directory
+  with_items: item
+
+- name: Mount snapshot
+  become: true
+  host: bastion[0]
+  mount:
+    path: "{{ mount_directory }}/{{ item.snapshot }}"
+    fstype: glusterfs
+    src: "{{ groups['gluster'][0]['ansible_hostname'] }}:/snaps/{{ item.snapshot }}/{{ item.volume }}"
+  with_items: item
+
+- name: Create target directory
+  become: true
+  host: bastion[0]
+  file:
+    path: "/{{ snapshot_dir }}/{{ item.snapshot }}"
+    state: directory
+  with_items: item
+
+- name: Tar the source
+  archive:
+    path:
+      - "{{ mount_directory }}/{{ item.snapshot }}/*"
+    dest: "{{ snapshot_dir }}/{{ item.snapshot }}.tar.bz2"
+    format: bz2
+  with_items: item
+
+- name: unmount the snapshot volume
+  become: true
+  host: bastion[0]
+  mount:
+    path: "{{ mount_directory }}/{{ item.snapshot }}"
+    state: unmounted 
+  with_items: item
+
+- name: Delete the Gluster snapshot
+  become: true
+  host: gluster[0]
+  shell: "/usr/sbin/gluster snapshot delete {{ item.snapshot }}"
+  with_items: item

@@ -1,0 +1,7 @@
+---
+- name: get list of volumes to backup
+
+
+- name: create snapshot
+  host: gluster[0]
+  shell: "/usr/sbin/gluster snapshot create {{ SNAPNAME }} {{ VOLNAME }} no-timestamp"
