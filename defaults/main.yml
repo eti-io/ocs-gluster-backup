@@ -16,3 +16,5 @@ mount_directory: /mnt/source
 heketi_user: admin ## User with admin permissions to dialog with Heketi
 heketi_secret: "INSERT YOUR KEY HERE" ## Heketi user key
 heketi_url: http://heketi-storage-glusterfs.example.com ## Route where Heketi pod is listening
+
+volumes: []

@@ -1,9 +1,5 @@
 ---
 # tasks file for ocs-gluster-backup
-vars:
-  volumes: []
-
-# This feels like there is a better way
 - name: Set the current time as a var
   shell: echo `%Y%m%d-%H:%M`
   register: datetime
@@ -34,5 +30,4 @@ vars:
     - name: Clear up previous backups
       import_tasks: cleanup.yaml
       with_items: volumes
-
   when: run_backup|bool == true
