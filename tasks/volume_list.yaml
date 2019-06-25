@@ -1,7 +1,9 @@
 ---
 - name: get list of volumes to backup
+  host: bastion[0]
+  shell: "/usr/bin/heketi-cli volume list --server {{ heketi_url }} --user {{ heketi_user }} --secret {{ heketi_secret }} | /usr/bin/grep -v block | /usr/bin/grep -v heketidbstorage | /usr/bin/cut -d":" -f4
+  register: source_volumes
 
 
-- name: create snapshot
-  host: gluster[0]
-  shell: "/usr/sbin/gluster snapshot create {{ SNAPNAME }} {{ VOLNAME }} no-timestamp"
+
+

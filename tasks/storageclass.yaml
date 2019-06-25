@@ -1,12 +1,15 @@
 ---
 
 - name: Backup the old storageclass
+  host: bastion[0]
   shell: oc get sc glusterfs-storage > /tmp/glusterfs-storage.yaml.tmp
 
 - name: Remove the old storageclass
+  host: bastion[0]
   shell: oc delete sc glusterfs-storage
 
 - name: Put the new storage class on the server
+  host: bastion[0]
   template:
     src: storageclass.yaml.j2
     dest: /tmp/storageclass.yaml.new
