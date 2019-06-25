@@ -28,23 +28,23 @@
 - hosts: glusterfs[0]
   tasks:
   - name: Prepare snapshots
-    import_tasks: prepare_snapshots.yaml
+    include_tasks: prepare_snapshots.yaml
     with_items: volumes
     when: run_backup|bool == true
 
   - name: Snapshot volumes
-    import_tasks: snapshot_volumes.yaml
+    include_tasks: snapshot_volumes.yaml
     with_items: volumes
     when: run_backup|bool == true
 
   - name: Clean snapshots
-    import_tasks: cleanup_snapshots.yaml
+    include_tasks: cleanup_snapshots.yaml
     with_items: volumes
     when: run_backup|bool == true
 
 - hosts: bastion[0]
   tasks:
   - name: Clear up previous backups
-    import_tasks: cleanup.yaml
+    include_tasks: cleanup.yaml
     with_items: volumes
     when: run_backup|bool == true
