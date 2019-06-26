@@ -21,7 +21,7 @@
 
   - name: generate volume dictionary
     set_fact:
-      volumes: "{{ volumes|default([]) + [ {'volume': item, 'snapshot': item ~ '-snap-' ~ datetime ] }}"
+      volumes: "{{ volumes|default([]) + [ {'volume': item, 'snapshot': item ~ '-snap-' ~ datetime } ] }}"
     with_items: "{{ source_volumes }}"
     when: run_backup|bool == true
 
