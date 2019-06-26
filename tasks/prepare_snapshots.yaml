@@ -1,12 +1,14 @@
 ---
 - name: create snapshot
   become: true
-  loop_var: item2
   shell: "/usr/sbin/gluster snapshot create {{ item2.snapshot }} {{ item2.volume }} no-timestamp | awk '{ print $5}'"
-  with_items: item
+  loop: "{{ item|flatten(levels=1) }}"
+  loop_control:
+    loop_var: item2
 
 - name: activate snapshot
-  loop_var: item2
   become: true
   shell: "/usr/sbin/gluster snapshot activate {{ item2.snapshot }}"
-  with_items: item
+  loop: "{{ item|flatten(levels=1) }}"
+  loop_control:
+    loop_var: item2
